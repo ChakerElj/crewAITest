@@ -4,6 +4,9 @@ from langchain.llms import AzureOpenAI, Ollama
 import os
 from langchain_openai import AzureChatOpenAI
 
+from tools.calculator_tools import CalculatorTools
+from tools.search_tools import SearchTools
+
 
 class TravelAgents:
     def __init__(self):
@@ -19,6 +22,10 @@ class TravelAgents:
             create a 7-day travel itinerary with detailed per-day plans,
             include budget , packing suggestions, and safety tips.
             """),
+            tools=[
+                SearchTools.search_internet,
+                CalculatorTools.calculate
+            ],
             allow_delegation=False,
             verbose=True,
             llm=self.AzureOpenAIGPT35
@@ -30,6 +37,7 @@ class TravelAgents:
             backstory=dedent(f"""Expert at analyzing travel data to pick ideal destinations"""),
             goal=dedent(f"""select the cities based on weather , season , prices , and traveler interests"""),
             allow_delegation=False,
+            tools=[SearchTools.search_internet],
             verbose=True,
             llm=self.AzureOpenAIGPT35
 
@@ -42,6 +50,7 @@ class TravelAgents:
             about the city , it's attractions and customs"""),
             goal=dedent(f"""Provide the BEST insights about the selected cities"""),
             allow_delegation=False,
+            tools=[SearchTools.search_internet],
             verbose=True,
             llm=self.AzureOpenAIGPT35
         )
